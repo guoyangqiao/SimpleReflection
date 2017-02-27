@@ -21,9 +21,39 @@ public class TestPhaser {
             "化作春泥更护花".toCharArray()
     };
 
-
     public static void main(String[] args) throws InterruptedException {
-        concurrentCalculateVector();
+//        getChanceToGetOffThePlan();
+    }
+
+    private static void getChanceToGetOffThePlan() {
+        int mans = 100;
+        Phaser phaser = new Phaser(mans);
+        for (int i = 0; i < mans; i++) {
+            new Thread(
+                    () -> {
+                        long id = Thread.currentThread().getId();
+                        boolean b = markBubble();
+                        System.out.println(id + " get bubble " + b);
+                        phaser.arriveAndAwaitAdvance();
+                        if (b) {
+                            System.out.println(id + " use chance to get off the plan");
+                            phaser.arriveAndAwaitAdvance();
+                            System.out.println(id + " get off succeed");
+                            phaser.arriveAndDeregister();
+                        } else {
+//                            System.out.println(id + " will stay here");
+                            phaser.arriveAndDeregister();
+                        }
+                    }
+            ).start();
+        }
+    }
+
+    static boolean b = false;
+
+    private static boolean markBubble() {
+        b = !b;
+        return b;
     }
 
     private static void usePhaseAsCyclicBarrier() {
