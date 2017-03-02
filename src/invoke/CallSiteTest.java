@@ -12,9 +12,13 @@ public class CallSiteTest {
     public static void main(String[] args) throws Throwable {
         //String.valueOf(Object o);
         MethodHandles.Lookup totalLookup = MethodHandles.lookup();
-        MethodHandle valueOf = totalLookup.findStatic(String.class, "valueOf", MethodType.methodType(String.class, Object.class));
-        Object valueOfResult = valueOf.invoke("淡淡的灰朦有一丝悲哀");
+        MethodHandle valueOfObject = totalLookup.findStatic(String.class, "valueOf", MethodType.methodType(String.class, Object.class));
+        Object valueOfResult = valueOfObject.invoke('A');
         System.out.println(valueOfResult);
+        //churlish asType by using polymorphism
+        MethodHandle Tester = valueOfObject.asType(MethodType.methodType(String.class, CallSiteTest.class));
+        Object invoke = Tester.invoke(new CallSiteTest());
+        System.out.println(invoke);
 
         //StringBuilder builder = new StringBuilder("abc);
         MethodHandle stringBuilderConstructor = totalLookup.findConstructor(StringBuilder.class, MethodType.methodType(void.class, String.class));
@@ -40,5 +44,10 @@ public class CallSiteTest {
         MethodHandle append = totalLookup.findVirtual(voidObj.getClass(), "append", MethodType.methodType(voidObj.getClass(), String.class));
         Object abc = append.invoke(voidObj, "abc");
         System.out.println(abc);
+    }
+
+    @Override
+    public String toString() {
+        return "I am a CallSiteTest";
     }
 }
