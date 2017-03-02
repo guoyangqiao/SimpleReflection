@@ -28,5 +28,17 @@ public class CallSiteTest {
         }
         //System.out.println(StringBuilder.instance);
         System.out.println(stringBuilder);
+
+        System.out.println("test bindTo");
+        //what does bindTo  mean
+        MethodHandle voidCon = totalLookup.findConstructor(StringBuilder.class, MethodType.methodType(void.class));
+        Object voidObj = voidCon.invoke();
+        /*
+        these two is functionally familiar, if you want to invoke a virtual method on a object, you must first bind the method to a object
+        MethodHandle stringBuilderAppend = totalLookup.findVirtual(StringBuilder.class, "append", MethodType.methodType(StringBuilder.class, String.class)).bindTo(stringBuilder);
+         */
+        MethodHandle append = totalLookup.findVirtual(voidObj.getClass(), "append", MethodType.methodType(voidObj.getClass(), String.class));
+        Object abc = append.invoke(voidObj, "abc");
+        System.out.println(abc);
     }
 }
