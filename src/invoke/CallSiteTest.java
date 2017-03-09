@@ -1,5 +1,6 @@
 package invoke;
 
+import java.lang.invoke.ConstantCallSite;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
@@ -9,9 +10,15 @@ import java.lang.invoke.MethodType;
  * Created by guoyangqiao on 02/03/2017.
  */
 public class CallSiteTest {
+    /**
+     * invoke由jvm优化, 类似于直接调用
+     * 方法检测发生在MethodHandle
+     * @param args
+     * @throws Throwable
+     */
     public static void main(String[] args) throws Throwable {
-        //String.valueOf(Object o);
         MethodHandles.Lookup totalLookup = MethodHandles.lookup();
+        //String.valueOf(Object o);
         MethodHandle valueOfObject = totalLookup.findStatic(String.class, "valueOf", MethodType.methodType(String.class, Object.class));
         Object valueOfResult = valueOfObject.invoke('A');
         System.out.println(valueOfResult);
@@ -44,6 +51,10 @@ public class CallSiteTest {
         MethodHandle append = totalLookup.findVirtual(voidObj.getClass(), "append", MethodType.methodType(voidObj.getClass(), String.class));
         Object abc = append.invoke(voidObj, "abc");
         System.out.println(abc);
+
+        ConstantCallSite constantCallSite = new ConstantCallSite(Tester);
+
+
     }
 
     @Override

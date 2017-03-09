@@ -1,5 +1,4 @@
-import java.lang.reflect.Parameter;
-import java.util.ArrayList;
+import java.io.OutputStreamWriter;
 
 /**
  * 说明:
@@ -12,17 +11,9 @@ public class Teser {
         System.out.println(abc + b + c);
     }
 
-    public static void main(String[] args) throws NoSuchMethodException {
-        for (Parameter a : Teser.class.getDeclaredMethod("getParameter", String.class, int.class, Integer.class).getParameters()) {
-            System.out.println(a.getName());
-        }
-    }
-
-    private void did() {
-        ArrayList<Integer> integers = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            integers.add(i);
-        }
-        integers.stream().filter(x -> x > 50).forEach(System.out::println);
+    public static void main(String[] args) throws Exception {
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(System.out);
+        outputStreamWriter.write("abc");
+        outputStreamWriter.close();
     }
 }
